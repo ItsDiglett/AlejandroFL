@@ -1,0 +1,8 @@
+config.py
+main.sqlite
+nwords.json
+roles.json
+yah.json
+/__pycache__
+/.vscode
+/cogs/__pycache__
