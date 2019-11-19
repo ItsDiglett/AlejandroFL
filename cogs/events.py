@@ -120,16 +120,17 @@ class Example(commands.Cog):
         async def on_message(self, message):
                 if message.guild.id == 504052021683290125:
                         if not message.author.id == 618903054506393640:
-                                embed = discord.Embed(
-                                colour = 0xff0000
-                                )                
-                                embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
-                                embed.add_field(name=f'{message.channel}', value=(message.content),inline=False)
-                                embed.set_footer(text=(time.ctime()))   
-                                #Message-Logs channel in FCR
-                                channel = self.client.get_channel(643907801604948018)
+                                if not message.channel.id == 512429920912408576:
+                                        embed = discord.Embed(
+                                        colour = 0xff0000
+                                        )                
+                                        embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
+                                        embed.add_field(name=f'{message.channel}', value=(message.content),inline=False)
+                                        embed.set_footer(text=(time.ctime()))   
+                                        #Message-Logs channel in FCR
+                                        channel = self.client.get_channel(643907801604948018)
 
-                                await channel.send(embed=embed)           
+                                        await channel.send(embed=embed)           
 
 def setup(client):
         client.add_cog(Example(client))

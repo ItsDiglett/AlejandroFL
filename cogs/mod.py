@@ -26,10 +26,15 @@ class Moderation(commands.Cog):
                 if ctx.message.author.guild_permissions.manage_messages:           
                     role = discord.utils.get(ctx.guild.roles, name='Gulag\'d')
                     await member.remove_roles(role)
+                    await ctx.message.add_reaction('✅')
+                    
                     sql = (f'DELETE FROM gulag WHERE user_id = {member.id}')
                     cursor.execute(sql)
                     db.commit()
+
                     bot = await self.client.fetch_user(618903054506393640)
+                    channel = self.client.get_channel(643908781452820490)
+                    message = ctx.message
                     
                     embed = discord.Embed(
                     colour = 0xff0000
@@ -38,7 +43,7 @@ class Moderation(commands.Cog):
                     embed.set_thumbnail(url=(member.avatar_url))
                     embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
                     #Mod-Actions Channel in FCR
-                    channel = self.client.get_channel(643908781452820490)
+                    
                     await channel.send(embed=embed)
                 else:
                     await ctx.send('You don\'t have the permissions to use that command')
@@ -47,9 +52,12 @@ class Moderation(commands.Cog):
         async def gulag(self,ctx, member: discord.Member):
             db = sqlite3.connect('main.sqlite')
             cursor = db.cursor()
-            bot = await self.client.fetch_user(618903054506393640)
             cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
             result = cursor.fetchone()
+
+            bot = await self.client.fetch_user(618903054506393640)
+            channel = self.client.get_channel(643908781452820490)
+
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
                     role = discord.utils.get(ctx.guild.roles, name='Gulag\'d')
@@ -65,9 +73,8 @@ class Moderation(commands.Cog):
                     embed.set_author(name=f'{ctx.message.author} has gulaged {member}')
                     embed.set_thumbnail(url=(member.avatar_url))
                     embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
-                    #Mod-Actions Channel in FCR
-                    channel = self.client.get_channel(643908781452820490) 
                     await channel.send(embed=embed)
+                    await ctx.message.add_reaction('✅')
                 else:
                     await ctx.send('You can\'t use that command.')
             else:
@@ -78,9 +85,11 @@ class Moderation(commands.Cog):
         async def ban(self, ctx, member : discord.Member, *, reason=None):
             if ctx.message.author.guild_permissions.manage_messages:
                 await member.ban(reason = reason)
-                await ctx.send(f'{member.mention} has been banned.')
+                await ctx.message.add_reaction('✅')
+
                 channel = self.client.get_channel(643908781452820490)
                 bot = await self.client.fetch_user(618903054506393640)
+
                 embed = discord.Embed(
                 colour = 0xff0000
                 )
@@ -103,7 +112,7 @@ class Moderation(commands.Cog):
         async def kick(self, ctx, member : discord.Member, *, reason=None):
             if ctx.message.author.guild_permissions.manage_messages:
                 await member.kick(reason=reason)
-                await ctx.send(f'{member.mention} has been kicked.')
+                await ctx.message.add_reaction('✅')
                 #Mod-Actions Channel in FCR
                 channel = self.client.get_channel(643908781452820490) 
                 bot = await self.client.fetch_user(618903054506393640)
@@ -151,6 +160,7 @@ class Moderation(commands.Cog):
             if ctx.message.author.guild_permissions.manage_messages:
                 test = discord.utils.get(ctx.guild.roles, name=role)
                 await member.add_roles(test)
+                await ctx.message.add_reaction('✅')
                 embed = discord.Embed(
                 colour = 0xff0000
                 )

@@ -48,6 +48,16 @@ async def on_message(message):
     await client.process_commands(message)
 
 
+#@client.command()
+#async def Yes(ctx, amount= 5):
+    #channel = client.get_channel(645172134125240341)
+    #await channel.send('''
+#__**Baby Alejandro Change Logs (Hotfix 11/19)v2**__   
+
+#__**Github**__
+#If for some reason you wanted to see the spaghetti I write, it's here:
+#https://github.com/ItsDiglett/AlejandroFL
+#  ''')
 
 client.run(alejandro)
 
