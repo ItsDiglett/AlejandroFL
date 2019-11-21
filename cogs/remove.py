@@ -16,7 +16,7 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_raw_reaction_remove(self, payload):
             message_id = payload.message_id
-            if message_id == 637750706526224384:
+            if message_id == 646833893382553600:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
 
@@ -24,33 +24,34 @@ class Example(commands.Cog):
                     League = discord.utils.get(guild.roles, name='League Of Legends')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(League)
-                    print('removed')
                 elif payload.emoji.name =='🇧':
                     Minecraft = discord.utils.get(guild.roles, name='Minecraft')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(Minecraft)
-                    print('removed')
                 elif payload.emoji.name =='🇨':
-                    PC = discord.utils.get(guild.roles, name='PC')
+                    Destiny = discord.utils.get(guild.roles, name='Destiny 2')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.remove_roles(PC)
-                    print('removed')
+                    await member.remove_roles(Destiny)
                 elif payload.emoji.name =='🇩':
-                    Xbox = discord.utils.get(guild.roles, name='Xbox')
+                    PC = discord.utils.get(guild.roles, name='PC')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(Xbox)            
                 elif payload.emoji.name =='🇪':
-                    PS4 = discord.utils.get(guild.roles, name='PS4')
+                    Xbox = discord.utils.get(guild.roles, name='Xbox')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.remove_roles(PS4)            
+                    await member.remove_roles(Xbox)            
                 elif payload.emoji.name =='🇫':
+                    PS4 = discord.utils.get(guild.roles, name='PS4')   
+                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                    await member.remove_roles(PS4)    
+                elif payload.emoji.name =='🇬':
                     Switch = discord.utils.get(guild.roles, name='Switch')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.remove_roles(Switch)    
+                    await member.remove_roles(Switch)                  
                 else:
                     print('Not Ye')
 
-            elif message_id == 637750706899517463:
+            elif message_id == 646833893890326538:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name == '🇦':
@@ -126,7 +127,7 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(FL18)
 
-            elif message_id == 637750707352502273:
+            elif message_id == 646833894255230976:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name=='💚':
@@ -162,7 +163,7 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(Yellow)
 
-            elif message_id == 643575849903325265:
+            elif message_id == 646833894917931036:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 emoji = self.client.get_emoji(id=643570826683351050)
@@ -170,8 +171,6 @@ class Example(commands.Cog):
                     NSFW = discord.utils.get(guild.roles, name='NSFW')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(NSFW)
-                else:
-                    print('no')
 
 
 

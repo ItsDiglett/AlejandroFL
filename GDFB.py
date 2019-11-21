@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from discord.utils import get
-from discord import FFmpegPCMAudio
 import asyncio
 import os
 from config import alejandro, zone, Malay
@@ -47,7 +46,6 @@ async def on_message(message):
 
     await client.process_commands(message)
 
-
 #@client.command()
 #async def Yes(ctx, amount= 5):
     #channel = client.get_channel(645172134125240341)
@@ -60,4 +58,3 @@ async def on_message(message):
 #  ''')
 
 client.run(alejandro)
-
