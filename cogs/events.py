@@ -20,17 +20,25 @@ class Example(commands.Cog):
         #This is logs the message deletes. Sends Logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_delete(self, message = discord.Message):
-                if message.guild.id == 504052021683290125:
-                        channel = self.client.get_channel(643907846651772948) #message-deletes in Florida Control room
-                        embed = discord.Embed(
-                        colour = 0xff0000
-                        )
-                        embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
-                        embed.add_field(name=(f'Message was deleted'), value=(message.content), inline=False)
-                        embed.set_footer(text=(time.ctime()))
+                channel = self.client.get_channel(643907846651772948) #message-deletes in Florida Control room
+                if message.guild.id == 504052021683290125:                
+                        if not message.attachments:
+                                
+                                embed = discord.Embed(
+                                colour = 0xff0000
+                                )
+                                embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
+                                embed.add_field(name=(f'Message was deleted'), value=(message.content), inline=False)
+                                embed.set_footer(text=(time.ctime()))
 
-                        await channel.send(embed=embed)
+                                await channel.send(embed=embed)
+                        else:        
+                                embed1 = discord.Embed(
+                                colour = 0xff0000
 
+                                )
+                                embed1.set_image(url=(message.attachments[0].url))
+                                await channel.send(embed=embed1)
         #This logs message edits and sends logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_edit(self, before, after):
@@ -86,51 +94,29 @@ class Example(commands.Cog):
 
                         await self.client.process_commands(member)
 
-        #This checks if you've been saying the n-word.
-        @commands.Cog.listener()
-        async def on_message(self, message):
-                badword = json.loads(open('nwords.json').read())
-                for badwords in badword:
-                        #This is the list of badwords, stored in a .json file
-                        if badwords in message.content:
-                                db = sqlite3.connect('main.sqlite')
-                                cursor = db.cursor()
-                                cursor.execute(f'SELECT count FROM nword WHERE user_id = {message.author.id}')
-                                result = cursor.fetchone()
-                                #If you aren't in the database, it adds you
-                                if result is None:
-                                        sql = ('INSERT INTO nword(user_id, count) VALUES(?,?)')
-                                        val = (message.author.id, 1)
-                                        cursor.execute(sql, val)
-                                        db.commit()
-                                else:
-                                        #If you are in the database, it adds a point.
-                                        cursor.execute(f'SELECT count FROM nword WHERE user_id = {message.author.id}')
-                                        result1 = cursor.fetchone()
-                                        msg = int(result1[0])
-                                        sql = ('UPDATE nword SET count = ? WHERE user_id = ?')
-                                        val = (msg + 1, str(message.author.id))
-                                        cursor.execute(sql, val)
-                                        db.commit()
-                        else:
-                                await asyncio.sleep(0.001)
-
         #This is the message logging function in FCR
         @commands.Cog.listener()
         async def on_message(self, message):
                 if message.guild.id == 504052021683290125:
+                        channel = self.client.get_channel(643907801604948018)
                         if not message.author.id == 618903054506393640:
                                 if not message.channel.id == 512429920912408576:
-                                        embed = discord.Embed(
-                                        colour = 0xff0000
-                                        )                
-                                        embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
-                                        embed.add_field(name=f'{message.channel}', value=(message.content),inline=False)
-                                        embed.set_footer(text=(time.ctime()))   
-                                        #Message-Logs channel in FCR
-                                        channel = self.client.get_channel(643907801604948018)
-
-                                        await channel.send(embed=embed)           
+                                        if not message.attachments:
+                                                embed = discord.Embed(
+                                                colour = 0xff0000
+                                                )                
+                                                embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
+                                                embed.add_field(name=f'{message.channel}', value=(message.content),inline=False)
+                                                embed.set_footer(text=(time.ctime()))   
+                                                #Message-Logs channel in FCR
+                                                await channel.send(embed=embed)           
+                                        else:
+                                                embed1 = discord.Embed(
+                                                colour = 0xff0000
+ 
+                                                )
+                                                embed1.set_image(url=(message.attachments[0].url))
+                                                await channel.send(embed=embed1)
 
 def setup(client):
         client.add_cog(Example(client))

@@ -24,15 +24,16 @@ class Moderation(commands.Cog):
                 await asyncio.sleep(0.01)
             else:
                 if ctx.message.author.guild_permissions.manage_messages:           
-                    role = discord.utils.get(ctx.guild.roles, name='Gulag\'d')
+                    role = ctx.guild.get_role(512018933134524430)
                     await member.remove_roles(role)
                     await ctx.message.add_reaction('✅')
                     
                     sql = (f'DELETE FROM gulag WHERE user_id = {member.id}')
                     cursor.execute(sql)
                     db.commit()
-
+                    #Baby Alejandro
                     bot = await self.client.fetch_user(618903054506393640)
+                    #Mod-Actions Channel in FCR
                     channel = self.client.get_channel(643908781452820490)
                     message = ctx.message
                     
@@ -42,7 +43,6 @@ class Moderation(commands.Cog):
                     embed.set_author(name=f'{ctx.message.author} has ungulaged {member}')
                     embed.set_thumbnail(url=(member.avatar_url))
                     embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
-                    #Mod-Actions Channel in FCR
                     
                     await channel.send(embed=embed)
                 else:
@@ -54,13 +54,14 @@ class Moderation(commands.Cog):
             cursor = db.cursor()
             cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
             result = cursor.fetchone()
-
+            #Baby Alejandro
             bot = await self.client.fetch_user(618903054506393640)
+            #Mod-actions chat in FCR.
             channel = self.client.get_channel(643908781452820490)
 
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
-                    role = discord.utils.get(ctx.guild.roles, name='Gulag\'d')
+                    role = ctx.guild.get_role(512018933134524430)
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
@@ -86,8 +87,9 @@ class Moderation(commands.Cog):
             if ctx.message.author.guild_permissions.manage_messages:
                 await member.ban(reason = reason)
                 await ctx.message.add_reaction('✅')
-
+                #Mod-actions chat in FCR.
                 channel = self.client.get_channel(643908781452820490)
+                #Baby Alejandro
                 bot = await self.client.fetch_user(618903054506393640)
 
                 embed = discord.Embed(
@@ -114,7 +116,8 @@ class Moderation(commands.Cog):
                 await member.kick(reason=reason)
                 await ctx.message.add_reaction('✅')
                 #Mod-Actions Channel in FCR
-                channel = self.client.get_channel(643908781452820490) 
+                channel = self.client.get_channel(643908781452820490)
+                #Baby Alejandro 
                 bot = await self.client.fetch_user(618903054506393640)
                 embed = discord.Embed(
                 colour = 0xff0000
@@ -126,36 +129,11 @@ class Moderation(commands.Cog):
             else:
                 await ctx.send('You don\'t have the permissions to use that command')
 
-     
-        @commands.command()
-        async def ncount(self,ctx, user: discord.User = None):
-            if ctx.message.author.guild_permissions.manage_messages:
-                if user is None:
-                        db = sqlite3.connect('main.sqlite')
-                        cursor = db.cursor()
-                        cursor.execute(f'SELECT count FROM nword WHERE user_id = {ctx.message.author.id}')
-                        result = cursor.fetchone()
-                        if result is not None:
-                            await ctx.send(f'{ctx.message.author.mention} has said {result[0]} n-words.')
-                        if result is None:
-                            await ctx.send(f'{ctx.message.author.mention}, you\'ve said no n-words. Keep it up!')
-                if user is not None:
-                        print(user)
-                        db = sqlite3.connect('main.sqlite')
-                        cursor = db.cursor()
-                        cursor.execute(f'SELECT count FROM nword WHERE user_id = {user.id}')
-                        result1 = cursor.fetchone()
-                        if result1 is not None:
-                            await ctx.send(f'{user.mention} has said {result1[0]} n-words.')
-                        if result1 is None:
-                            await ctx.send(f'{user.mention} has said no n-words. Good job.')
-            else:       
-                await asyncio.sleep(0.001)
-
         @commands.command()
         async def give(self, ctx, member:discord.Member, role):
             #Mod-Actions Channel in FCR
             channel = self.client.get_channel(643908781452820490)
+            #Baby Alejandro
             bot = await self.client.fetch_user(618903054506393640)
             if ctx.message.author.guild_permissions.manage_messages:
                 test = discord.utils.get(ctx.guild.roles, name=role)

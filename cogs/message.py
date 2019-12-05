@@ -31,7 +31,7 @@ class leaderboard(commands.Cog):
             else:
                 #This makes sure Baby Alejandro(the bot) doesn't get xp
                 if message.author.id == 618903054506393640:
-                    print('no')
+                    pass
                 #This gives you XP if you are already in the database
                 else:
                     cursor.execute(f'SELECT msg FROM messages WHERE user_id = {message.author.id}')

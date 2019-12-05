@@ -3,12 +3,12 @@ from discord.ext import commands
 from discord.utils import get
 import asyncio
 import os
-from config import alejandro, zone, Malay
+from config import alejandro
 import random
-import time
 import math
 import sqlite3
 import json
+import time
 
 print(os.getcwd())
 client = commands.Bot(command_prefix = '/') 
@@ -34,8 +34,7 @@ async def on_member_remove(member):
 @client.event
 async def on_message(message):
     if message.content.startswith('/v'):
-        creator = discord.utils.get(message.guild.roles, name ="Creators")
-        if creator in message.author.roles:
+        if message.author.guild_permissions.manage_messages:
             await message.add_reaction('✅')
             await message.add_reaction('🇽')
         else:
@@ -45,16 +44,18 @@ async def on_message(message):
         await asyncio.sleep(0.01)
 
     await client.process_commands(message)
-
+    
 #@client.command()
 #async def Yes(ctx, amount= 5):
     #channel = client.get_channel(645172134125240341)
     #await channel.send('''
-#__**Baby Alejandro Change Logs (Hotfix 11/19)v2**__   
+#__**Baby Alejandro Change Logs 12/4**__
 
 #__**Github**__
 #If for some reason you wanted to see the spaghetti I write, it's here:
+
 #https://github.com/ItsDiglett/AlejandroFL
 #  ''')
+#    print('Done!')
 
 client.run(alejandro)
