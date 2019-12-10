@@ -42,7 +42,8 @@ class Moderation(commands.Cog):
                     )
                     embed.set_author(name=f'{ctx.message.author} has ungulaged {member}')
                     embed.set_thumbnail(url=(member.avatar_url))
-                    embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
+                    embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                    embed.timestamp = ctx.message.created_at
                     
                     await channel.send(embed=embed)
                 else:
@@ -73,7 +74,8 @@ class Moderation(commands.Cog):
                     )
                     embed.set_author(name=f'{ctx.message.author} has gulaged {member}')
                     embed.set_thumbnail(url=(member.avatar_url))
-                    embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
+                    embed.timestamp = ctx.message.created_at 
+                    embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                     await channel.send(embed=embed)
                     await ctx.message.add_reaction('✅')
                 else:
@@ -97,7 +99,8 @@ class Moderation(commands.Cog):
                 )
                 embed.set_author(name=(f'{ctx.message.author} has banned {member}.'))
                 embed.set_thumbnail(url=(member.avatar_url))
-                embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
+                embed.timestamp = ctx.message.created_at 
+                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                 await channel.send(embed=embed)
             else:
                 await ctx.send('You don\'t have the permissions to use that command')
@@ -124,7 +127,8 @@ class Moderation(commands.Cog):
                 )
                 embed.set_author(name=(f'{ctx.message.author} has kicked {member}.'))
                 embed.set_thumbnail(url=(member.avatar_url))
-                embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
+                embed.timestamp = ctx.message.created_at 
+                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                 await channel.send(embed=embed)
             else:
                 await ctx.send('You don\'t have the permissions to use that command')
@@ -144,7 +148,8 @@ class Moderation(commands.Cog):
                 )
                 embed.set_author(name=(f'{ctx.message.author} has given {member} the {test} role'))
                 embed.set_thumbnail(url=(member.avatar_url))
-                embed.set_footer(text=f'{bot}• {time.ctime()}', icon_url=(bot.avatar_url))
+                embed.timestamp = ctx.message.created_at 
+                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                 
                 await channel.send(embed=embed)
             else:

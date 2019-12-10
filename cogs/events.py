@@ -8,6 +8,7 @@ import json
 from config import dev
 import time
 import sqlite3
+import datetime
 
 class Example(commands.Cog):
         def __init__(self,client):
@@ -19,8 +20,9 @@ class Example(commands.Cog):
                 
         #This is logs the message deletes. Sends Logs to Florida Control Room
         @commands.Cog.listener()
-        async def on_message_delete(self, message = discord.Message):
+        async def on_message_delete(self, message = discord.Message):                
                 channel = self.client.get_channel(643907846651772948) #message-deletes in Florida Control room
+                bot = await self.client.fetch_user(618903054506393640)
                 if message.guild.id == 504052021683290125:                
                         if not message.attachments:
                                 
@@ -28,8 +30,9 @@ class Example(commands.Cog):
                                 colour = 0xff0000
                                 )
                                 embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
-                                embed.add_field(name=(f'Message was deleted'), value=(message.content), inline=False)
-                                embed.set_footer(text=(time.ctime()))
+                                embed.add_field(name=(f'Message was deleted in #{message.channel}'), value=(message.content), inline=False)
+                                embed.timestamp = message.created_at 
+                                embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))  
 
                                 await channel.send(embed=embed)
                         else:        
@@ -37,13 +40,17 @@ class Example(commands.Cog):
                                 colour = 0xff0000
 
                                 )
+                                embed1.set_author(name=(message.author), icon_url=(message.author.avatar_url))
                                 embed1.set_image(url=(message.attachments[0].url))
+                                embed1.set_footer(text=f'Channel:#{message.channel}')
+                                embed1.timestamp = message.created_at
                                 await channel.send(embed=embed1)
         #This logs message edits and sends logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_edit(self, before, after):
                 if before.guild.id == 504052021683290125:
                         channel = self.client.get_channel(643907825986306058) #message-edits channel in Florida Control Room
+                        bot = await self.client.fetch_user(618903054506393640)
                         if before.content != after.content:
                                 embed = discord.Embed(
                                 colour = 0xff0000
@@ -51,8 +58,8 @@ class Example(commands.Cog):
                                 embed.set_author(name=(before.author), icon_url=(before.author.avatar_url))
                                 embed.add_field(name=f'Message was edited in #{before.channel}', value=(before.content),inline=False)
                                 embed.add_field(name='Message now:', value=(after.content), inline=False)
-                                embed.set_footer(text=(time.ctime()))
-        
+                                embed.timestamp = after.edited_at
+                                embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
                                 await channel.send(embed=embed)
 
         #This is the welcoming function. Sends welcomes to Florida, #welcome
@@ -66,7 +73,7 @@ class Example(commands.Cog):
 
                         #This updates the member count in FCR
                         await channel2.edit(name= f'Members: {member.guild.member_count} ')
-
+                        bot = await self.client.fetch_user(618903054506393640)
                         #This sends the welcome #message in FL
                         rules = self.client.get_channel(511614286640971796) # rules channel
                         await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention}!')
@@ -77,7 +84,8 @@ class Example(commands.Cog):
                         )                
                         embed.set_author(name=f'{member} has joined the server')
                         embed.set_thumbnail(url=(member.avatar_url))
-                        embed.set_footer(text=(time.ctime()))
+                        embed.timestamp = member.joined_at
+                        embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
                         await channel3.send(embed=embed)
 
                         #This checks if some has been gulag'd (role persist)
@@ -99,6 +107,7 @@ class Example(commands.Cog):
         async def on_message(self, message):
                 if message.guild.id == 504052021683290125:
                         channel = self.client.get_channel(643907801604948018)
+                        bot = await self.client.fetch_user(618903054506393640)
                         if not message.author.id == 618903054506393640:
                                 if not message.channel.id == 512429920912408576:
                                         if not message.attachments:
@@ -106,8 +115,9 @@ class Example(commands.Cog):
                                                 colour = 0xff0000
                                                 )                
                                                 embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
-                                                embed.add_field(name=f'{message.channel}', value=(message.content),inline=False)
-                                                embed.set_footer(text=(time.ctime()))   
+                                                embed.add_field(name=f'#{message.channel}', value=(message.content),inline=False)
+                                                embed.timestamp = message.created_at
+                                                embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))  
                                                 #Message-Logs channel in FCR
                                                 await channel.send(embed=embed)           
                                         else:
@@ -115,7 +125,11 @@ class Example(commands.Cog):
                                                 colour = 0xff0000
  
                                                 )
+                                                embed1.set_author(name=(message.author), icon_url=(message.author.avatar_url))
                                                 embed1.set_image(url=(message.attachments[0].url))
+                                                embed1.set_footer(text=f'Channel:#{message.channel}')
+                                                embed1.timestamp = message.created_at
+                                                embed1.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
                                                 await channel.send(embed=embed1)
 
 def setup(client):
