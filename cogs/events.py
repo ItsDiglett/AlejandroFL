@@ -95,7 +95,7 @@ class Example(commands.Cog):
                         result = cursor.fetchone()
 
                         if result is not None:
-                                role = discord.utils.get(member.guild.roles, name='Gulag\'d')
+                                role = discord.utils.get(member.guild.roles, name='Gulaged')
                                 await member.add_roles(role)
                         else:
                                 await asyncio.sleep(0.01)
