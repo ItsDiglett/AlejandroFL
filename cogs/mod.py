@@ -63,6 +63,7 @@ class Moderation(commands.Cog):
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
                     role = ctx.guild.get_role(512018933134524430)
+                    NSFW = ctx.guild.get_role(512421686587424768)
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
@@ -78,6 +79,9 @@ class Moderation(commands.Cog):
                     embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                     await channel.send(embed=embed)
                     await ctx.message.add_reaction('✅')
+                    if NSFW in member.roles:
+                        await member.remove_roles(NSFW)
+
                 else:
                     await ctx.send('You can\'t use that command.')
             else:

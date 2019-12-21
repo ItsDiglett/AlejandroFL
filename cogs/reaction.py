@@ -35,18 +35,22 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Destiny)
                 elif payload.emoji.name =='🇩':
+                    Halo = discord.utils.get(guild.roles, name='Halo')
+                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                    await member.add_roles(Halo)
+                elif payload.emoji.name =='🇪':
                     PC = discord.utils.get(guild.roles, name='PC')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(PC)            
-                elif payload.emoji.name =='🇪':
+                elif payload.emoji.name =='🇫':
                     Xbox = discord.utils.get(guild.roles, name='Xbox')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Xbox)            
-                elif payload.emoji.name =='🇫':
+                elif payload.emoji.name =='🇬':
                     PS4 = discord.utils.get(guild.roles, name='PS4')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(PS4)    
-                elif payload.emoji.name =='🇬':
+                elif payload.emoji.name =='🇭':
                     Switch = discord.utils.get(guild.roles, name='Switch')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Switch)                  
