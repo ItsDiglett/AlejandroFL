@@ -8,6 +8,7 @@ import json
 from config import dev
 import time
 import sqlite3
+from datetime import datetime
 
 class Example(commands.Cog):
         def __init__(self,client):
@@ -182,9 +183,20 @@ class Example(commands.Cog):
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name == '✅':
-                    Role = discord.utils.get(guild.roles, name='Member')   
+                    Role = discord.utils.get(guild.roles, name='Member')
+                    unverified = discord.utils.get(guild.roles, name='unverified')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Role)
+                    await member.remove_roles(unverified)
+                    embed = discord.Embed(
+                    colour = 0xff0000
+                    )                
+                    embed.set_author(name=f'{member} has been verified.')
+                    embed.set_thumbnail(url=(member.avatar_url))
+                    embed.timestamp = datetime.utcnow()
+
+                    channel = self.client.get_channel(658725663691505678)
+                    await channel.send(embed=embed)
                
 
 

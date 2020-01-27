@@ -8,7 +8,7 @@ import json
 from config import dev
 import time
 import sqlite3
-import datetime
+from datetime import datetime, timedelta
 
 class Example(commands.Cog):
         def __init__(self,client):
@@ -66,11 +66,13 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_member_join(self, member, invite = discord.Invite):
                 if member.guild.id == 504052021683290125:
+                        unverified = member.guild.get_role(671074340636459008)
+                        await member.add_roles(unverified)
                         #These are the channels, FL = Florida, FCR = Control Room
                         channel = self.client.get_channel(507030960756228108) #Welcome, FL
                         channel3 = self.client.get_channel(643908037718966292) #joins channel, FCR
                         channel2 = self.client.get_channel(643915842865856524) #Members channel, FL
-
+                        
                         #This updates the member count in FCR
                         await channel2.edit(name= f'Members: {member.guild.member_count} ')
                         bot = await self.client.fetch_user(618903054506393640)
@@ -105,7 +107,7 @@ class Example(commands.Cog):
         #This is the message logging function in FCR
         @commands.Cog.listener()
         async def on_message(self, message):
-                if message.guild.id == 504052021683290125:
+                if message.guild.id == 504052021683290125: #CHANGE THIS CHANGE THIS CHANGE THIS
                         channel = self.client.get_channel(643907801604948018)
                         bot = await self.client.fetch_user(618903054506393640)
                         if not message.author.id == 618903054506393640:
@@ -131,6 +133,50 @@ class Example(commands.Cog):
                                                 embed1.timestamp = message.created_at
                                                 embed1.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
                                                 await channel.send(embed=embed1)
+
+        @commands.Cog.listener()
+        async def on_voice_state_update(self, member, before, after):
+                bot = await self.client.fetch_user(618903054506393640)
+                channel = self.client.get_channel(658050554806927360)
+                if not before.channel and after.channel:
+                        embed = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed.set_author(name=f'{member} has joined {after.channel}(VC)')
+                        embed.set_thumbnail(url=(member.avatar_url))
+                        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed)
+                elif before.channel and not after.channel:
+                        embed1 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed1.set_author(name=f'{member} has left {before.channel}(VC)')
+                        embed1.set_thumbnail(url=(member.avatar_url))
+                        embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed1.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed1)
+
+                elif not before.mute and after.mute:
+                        embed2 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed2.set_author(name=f'{member} has been muted.')
+                        embed2.set_thumbnail(url=(member.avatar_url))
+                        embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed2.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed2)
+
+                elif not before.deaf and after.deaf:
+                        embed3 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed3.set_author(name=f'{member} has been deafened.')
+                        embed3.set_thumbnail(url=(member.avatar_url))
+                        embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed3.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed3)
+
 
 def setup(client):
         client.add_cog(Example(client))

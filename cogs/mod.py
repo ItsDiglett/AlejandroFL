@@ -35,7 +35,6 @@ class Moderation(commands.Cog):
                     bot = await self.client.fetch_user(618903054506393640)
                     #Mod-Actions Channel in FCR
                     channel = self.client.get_channel(643908781452820490)
-                    message = ctx.message
                     
                     embed = discord.Embed(
                     colour = 0xff0000
@@ -158,6 +157,30 @@ class Moderation(commands.Cog):
                 await channel.send(embed=embed)
             else:
                 return
-                          
+
+        @commands.command()
+        async def verify(self, ctx):
+            if ctx.message.author.guild_permissions.manage_messages:
+                unverified = ctx.guild.get_role(671074340636459008)
+                channel = self.client.get_channel(511614286640971796)
+                await channel.set_permissions(unverified, read_messages=False)
+
+        @commands.command()
+        async def unverify(self, ctx):
+            if ctx.message.author.guild_permissions.manage_messages:
+                unverified = ctx.guild.get_role(671074340636459008)
+                channel = self.client.get_channel(511614286640971796)
+                await channel.set_permissions(unverified, read_messages=True)
+
+        @commands.command()
+        async def slowmode(self, ctx):
+            if ctx.message.author.guild_permissions.manage_messages:
+                channel = ctx.message.channel
+                if channel.slowmode_delay == 0:                      
+                    await channel.edit(slowmode_delay=15)
+                else:
+                    await channel.edit(slowmode_delay=0)
+
+
 def setup(client):
         client.add_cog(Moderation(client))
