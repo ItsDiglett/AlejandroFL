@@ -24,7 +24,7 @@ class Moderation(commands.Cog):
                 await asyncio.sleep(0.01)
             else:
                 if ctx.message.author.guild_permissions.manage_messages:           
-                    role = ctx.guild.get_role(512018933134524430)
+                    role = ctx.guild.get_role(512018933134524430) #Gulaged Role
                     await member.remove_roles(role)
                     await ctx.message.add_reaction('✅')
                     
@@ -46,7 +46,7 @@ class Moderation(commands.Cog):
                     
                     await channel.send(embed=embed)
                 else:
-                    await ctx.send('You don\'t have the permissions to use that command')
+                    pass
 
         @commands.command(pass_context=True,name='gulag', help='Gulags a member')
         async def gulag(self,ctx, member: discord.Member):
@@ -61,8 +61,8 @@ class Moderation(commands.Cog):
 
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
-                    role = ctx.guild.get_role(512018933134524430)
-                    NSFW = ctx.guild.get_role(512421686587424768)
+                    role = ctx.guild.get_role(512018933134524430) #Gulaged Role
+                    NSFW = ctx.guild.get_role(512421686587424768) #NSFW Role
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
@@ -82,7 +82,7 @@ class Moderation(commands.Cog):
                         await member.remove_roles(NSFW)
 
                 else:
-                    await ctx.send('You can\'t use that command.')
+                    pass
             else:
                 await asyncio.sleep(0.01)
                 print('yes')
@@ -105,8 +105,10 @@ class Moderation(commands.Cog):
                 embed.timestamp = ctx.message.created_at 
                 embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                 await channel.send(embed=embed)
+            elif ctx.message.author.id == 618897651026493441:
+                await member.ban(reason = reason)
             else:
-                await ctx.send('You don\'t have the permissions to use that command')
+                pass
 
         @commands.command(pass_context=True, name='purge', help = 'purges messages from the chat.')
         async def purge(self, ctx, amount=5):
@@ -114,7 +116,7 @@ class Moderation(commands.Cog):
                 await ctx.channel.purge(limit=amount)
 
             else:
-                await ctx.send('You don\'t have the permissions to use that command.')
+                pass
 
         @commands.command(pass_context=True,name='kick', help='Kicks a Member')
         async def kick(self, ctx, member : discord.Member, *, reason=None):
@@ -134,9 +136,26 @@ class Moderation(commands.Cog):
                 embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                 await channel.send(embed=embed)
             else:
-                await ctx.send('You don\'t have the permissions to use that command')
+                pass
+        @commands.command(pass_context=True,name='trust', help='Gives a member the Publix Customer role')
+        async def trust(self, ctx, member: discord.Member):
+            if ctx.message.author.guild_permissions.manage_messages:
+                role = ctx.guild.get_role(573544311132520469) #Trusted role or whatever Matt wants to call it
+                await member.add_roles(role)
+                bot = await self.client.fetch_user(618903054506393640)
+                channel = self.client.get_channel(643908781452820490)
+                embed = discord.Embed(
+                colour = 0xff0000
+                )
+                embed.set_author(name=(f'{ctx.message.author} has trusted {member}.'))
+                embed.set_thumbnail(url=(member.avatar_url))
+                embed.timestamp = ctx.message.created_at 
+                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                await channel.send(embed=embed)
+            else:
+                pass
 
-        @commands.command()
+        @commands.command(pass_context=True,name='give', help='Gives a member a role')
         async def give(self, ctx, member:discord.Member, role):
             #Mod-Actions Channel in FCR
             channel = self.client.get_channel(643908781452820490)
@@ -158,21 +177,21 @@ class Moderation(commands.Cog):
             else:
                 return
 
-        @commands.command()
+        @commands.command(pass_context=True,name='verify', help='Locks the verify channel')
         async def verify(self, ctx):
             if ctx.message.author.guild_permissions.manage_messages:
-                unverified = ctx.guild.get_role(671074340636459008)
-                channel = self.client.get_channel(511614286640971796)
+                unverified = ctx.guild.get_role(671074340636459008) #Unverified Role
+                channel = self.client.get_channel(511614286640971796) #Rules-And-Verify Channel
                 await channel.set_permissions(unverified, read_messages=False)
 
-        @commands.command()
+        @commands.command(pass_context=True,name='unverify', help='unlocks the verify channel')
         async def unverify(self, ctx):
             if ctx.message.author.guild_permissions.manage_messages:
-                unverified = ctx.guild.get_role(671074340636459008)
-                channel = self.client.get_channel(511614286640971796)
+                unverified = ctx.guild.get_role(671074340636459008) #Unverified Role
+                channel = self.client.get_channel(511614286640971796) #Rules-And-Verify Channel
                 await channel.set_permissions(unverified, read_messages=True)
 
-        @commands.command()
+        @commands.command(pass_context=True,name='slowmode', help='Sets the channel to slowmode')
         async def slowmode(self, ctx):
             if ctx.message.author.guild_permissions.manage_messages:
                 channel = ctx.message.channel

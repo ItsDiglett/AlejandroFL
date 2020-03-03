@@ -107,7 +107,7 @@ class Example(commands.Cog):
         #This is the message logging function in FCR
         @commands.Cog.listener()
         async def on_message(self, message):
-                if message.guild.id == 504052021683290125: #CHANGE THIS CHANGE THIS CHANGE THIS
+                if message.guild.id == 504052021683290125:
                         channel = self.client.get_channel(643907801604948018)
                         bot = await self.client.fetch_user(618903054506393640)
                         if not message.author.id == 618903054506393640:
@@ -176,6 +176,8 @@ class Example(commands.Cog):
                         embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
                         embed3.timestamp = datetime.utcnow()
                         await channel.send(embed=embed3)
+
+
 
 
 def setup(client):

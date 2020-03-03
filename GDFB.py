@@ -9,6 +9,7 @@ import math
 import sqlite3
 import json
 from datetime import datetime, timedelta
+import time
 
 print(os.getcwd())
 client = commands.Bot(command_prefix = '/') 
@@ -46,11 +47,11 @@ async def on_message(message):
 
     await client.process_commands(message)
 
-#@client.command()
+#@client.command() 
 #async def Yes(ctx, amount= 5):
     #channel = client.get_channel(645172134125240341)
     #await channel.send('''
-#__**Baby Alejandro Change Logs 1/27**__
+#__**Baby Alejandro Change Logs 3/3**__
 
 #__**Github**__
 #If for some reason you wanted to see the spaghetti I write, it's here:

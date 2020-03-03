@@ -173,8 +173,8 @@ class Example(commands.Cog):
             elif message_id == 646833894917931036:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-                emoji = self.client.get_emoji(id=643570826683351050)
-                if payload.emoji == emoji:
+
+                if payload.emoji.name == '✅':
                     NSFW = discord.utils.get(guild.roles, name='NSFW')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(NSFW)
@@ -183,7 +183,7 @@ class Example(commands.Cog):
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name == '✅':
-                    Role = discord.utils.get(guild.roles, name='Member')
+                    Role = guild.get_role(507597977754402846)
                     unverified = discord.utils.get(guild.roles, name='unverified')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Role)
