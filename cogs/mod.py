@@ -9,6 +9,10 @@ import random
 import time
 import sqlite3
 import json
+from datetime import datetime
+import gtts
+
+vc = None
 
 class Moderation(commands.Cog):
         def __init__(self,client):
@@ -142,6 +146,7 @@ class Moderation(commands.Cog):
             if ctx.message.author.guild_permissions.manage_messages:
                 role = ctx.guild.get_role(573544311132520469) #Trusted role or whatever Matt wants to call it
                 await member.add_roles(role)
+                await ctx.message.add_reaction('✅')
                 bot = await self.client.fetch_user(618903054506393640)
                 channel = self.client.get_channel(643908781452820490)
                 embed = discord.Embed(
@@ -199,6 +204,44 @@ class Moderation(commands.Cog):
                     await channel.edit(slowmode_delay=15)
                 else:
                     await channel.edit(slowmode_delay=0)
+
+        @commands.command()
+        async def t(self, ctx, *, texts:str):
+            global vc
+            tts = gtts.gTTS(texts)
+            tts.save("tts.mp3")
+            channel = ctx.message.author.voice.channel
+            if vc is None:
+                vc = await channel.connect() 
+            elif vc.channel != channel:
+                vc = await channel.connect()
+        
+            vc.play(discord.FFmpegPCMAudio(f'tts.mp3')) 
+            while vc.is_playing():
+                    await asyncio.sleep(0.1)
+            vc.stop() 
+
+        @commands.command()
+        async def vote(self, ctx, *question:str):
+            if ctx.message.author.guild_permissions.manage_messages:
+                embed = discord.Embed(
+                colour = 0xff0000
+                )
+
+                embed.title = ' '.join(question)
+                embed.add_field(name='Options:', value='✅Yes \n🚫No')
+                embed.timestamp = datetime.utcnow()
+
+                channel = ctx.message.channel
+                message = await channel.send(embed=embed)
+                await message.add_reaction('✅')
+                await message.add_reaction('🚫')
+
+        @commands.command()
+        async def leave(self, ctx):
+            server = ctx.message.guild.voice_client
+            await server.disconnect()    
+
 
 
 def setup(client):

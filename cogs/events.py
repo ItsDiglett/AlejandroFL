@@ -17,6 +17,7 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_ready(self):
                 print('It\'s alive!')
+                await self.client.change_presence(activity=discord.Game(name='/help for information'))
                 
         #This is logs the message deletes. Sends Logs to Florida Control Room
         @commands.Cog.listener()
@@ -56,8 +57,9 @@ class Example(commands.Cog):
                                 colour = 0xff0000
                                 )
                                 embed.set_author(name=(before.author), icon_url=(before.author.avatar_url))
-                                embed.add_field(name=f'Message was edited in #{before.channel}', value=(before.content),inline=False)
-                                embed.add_field(name='Message now:', value=(after.content), inline=False)
+                                embed.description = f'**Message was edited in** {before.channel.mention} [Jump to Message]({before.jump_url}) '
+                                embed.add_field(name=f'Before:', value=(before.content),inline=False)
+                                embed.add_field(name='After:', value=(after.content), inline=False)
                                 embed.timestamp = after.edited_at
                                 embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
                                 await channel.send(embed=embed)
@@ -78,7 +80,8 @@ class Example(commands.Cog):
                         bot = await self.client.fetch_user(618903054506393640)
                         #This sends the welcome #message in FL
                         rules = self.client.get_channel(511614286640971796) # rules channel
-                        await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention}!')
+                        roles = self.client.get_channel(512128306535989249) # roles channel
+                        await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention} and get roles from {roles.mention}!')
 
                         #This sends the message in #joins in FCR 
                         embed = discord.Embed(
@@ -115,8 +118,9 @@ class Example(commands.Cog):
                                         if not message.attachments:
                                                 embed = discord.Embed(
                                                 colour = 0xff0000
-                                                )                
-                                                embed.set_author(name=(message.author), icon_url=(message.author.avatar_url))
+                                                ) 
+                                                embed.description = f'[Jump to message]({message.jump_url})'               
+                                                embed.set_author(name=f'{message.author}', icon_url=(message.author.avatar_url))
                                                 embed.add_field(name=f'#{message.channel}', value=(message.content),inline=False)
                                                 embed.timestamp = message.created_at
                                                 embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))  
@@ -138,44 +142,45 @@ class Example(commands.Cog):
         async def on_voice_state_update(self, member, before, after):
                 bot = await self.client.fetch_user(618903054506393640)
                 channel = self.client.get_channel(658050554806927360)
-                if not before.channel and after.channel:
-                        embed = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed.set_author(name=f'{member} has joined {after.channel}(VC)')
-                        embed.set_thumbnail(url=(member.avatar_url))
-                        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed)
-                elif before.channel and not after.channel:
-                        embed1 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed1.set_author(name=f'{member} has left {before.channel}(VC)')
-                        embed1.set_thumbnail(url=(member.avatar_url))
-                        embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed1.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed1)
+                if not member.id == 618903054506393640:
+                        if not before.channel and after.channel:
+                                embed = discord.Embed(
+                                colour = 0xff0000
+                                )                
+                                embed.set_author(name=f'{member} has joined {after.channel}(VC)')
+                                embed.set_thumbnail(url=(member.avatar_url))
+                                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                                embed.timestamp = datetime.utcnow()
+                                await channel.send(embed=embed)
+                        elif before.channel and not after.channel:
+                                embed1 = discord.Embed(
+                                colour = 0xff0000
+                                )                
+                                embed1.set_author(name=f'{member} has left {before.channel}(VC)')
+                                embed1.set_thumbnail(url=(member.avatar_url))
+                                embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                                embed1.timestamp = datetime.utcnow()
+                                await channel.send(embed=embed1)
 
-                elif not before.mute and after.mute:
-                        embed2 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed2.set_author(name=f'{member} has been muted.')
-                        embed2.set_thumbnail(url=(member.avatar_url))
-                        embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed2.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed2)
+                        elif not before.mute and after.mute:
+                                embed2 = discord.Embed(
+                                colour = 0xff0000
+                                )                
+                                embed2.set_author(name=f'{member} has been muted.')
+                                embed2.set_thumbnail(url=(member.avatar_url))
+                                embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                                embed2.timestamp = datetime.utcnow()
+                                await channel.send(embed=embed2)
 
-                elif not before.deaf and after.deaf:
-                        embed3 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed3.set_author(name=f'{member} has been deafened.')
-                        embed3.set_thumbnail(url=(member.avatar_url))
-                        embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed3.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed3)
+                        elif not before.deaf and after.deaf:
+                                embed3 = discord.Embed(
+                                colour = 0xff0000
+                                )                
+                                embed3.set_author(name=f'{member} has been deafened.')
+                                embed3.set_thumbnail(url=(member.avatar_url))
+                                embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                                embed3.timestamp = datetime.utcnow()
+                                await channel.send(embed=embed3)
 
 
 
