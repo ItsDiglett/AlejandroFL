@@ -55,7 +55,7 @@ class Example(commands.Cog):
                 else:
                     print('Not Ye')
 
-            elif message_id == 646833893890326538:
+            elif message_id == 691483294709055538:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name == '🇦':
