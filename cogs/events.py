@@ -18,13 +18,12 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_ready(self):
                 print('It\'s alive!')
-                await self.client.change_presence(activity=discord.Game(name='/help for information'))
                 
         #This is logs the message deletes. Sends Logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_delete(self, message = discord.Message):                
                 if message.guild.id == 504052021683290125:                
-                        await MessageLog.deletes(self, messages=(message.content), members=(message.author), picture=(message.author.avatar_url), messagechannel=(message.channel))
+                        await MessageLog.deletes(self, messages=(message.content), members=(message.author), picture=(message.author.avatar_url), messagechannel=f'Message was deleted in #{message.channel}:')
         #This logs message edits and sends logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_edit(self, before, after):
@@ -48,8 +47,7 @@ class Example(commands.Cog):
                         bot = await self.client.fetch_user(618903054506393640)
                         #This sends the welcome #message in FL
                         rules = self.client.get_channel(511614286640971796) # rules channel
-                        roles = self.client.get_channel(512128306535989249) # roles channel
-                        await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention} and get roles from {roles.mention}!')
+                        await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention}!')
 
                         #This sends the message in #joins in FCR 
                         embed = discord.Embed(
@@ -87,45 +85,44 @@ class Example(commands.Cog):
         async def on_voice_state_update(self, member, before, after):
                 bot = await self.client.fetch_user(618903054506393640)
                 channel = self.client.get_channel(658050554806927360)
-                if not member.id == 618903054506393640:
-                        if not before.channel and after.channel:
-                                embed = discord.Embed(
-                                colour = 0xff0000
-                                )                
-                                embed.set_author(name=f'{member} has joined {after.channel}(VC)')
-                                embed.set_thumbnail(url=(member.avatar_url))
-                                embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                                embed.timestamp = datetime.utcnow()
-                                await channel.send(embed=embed)
-                        elif before.channel and not after.channel:
-                                embed1 = discord.Embed(
-                                colour = 0xff0000
-                                )                
-                                embed1.set_author(name=f'{member} has left {before.channel}(VC)')
-                                embed1.set_thumbnail(url=(member.avatar_url))
-                                embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                                embed1.timestamp = datetime.utcnow()
-                                await channel.send(embed=embed1)
+                if not before.channel and after.channel:
+                        embed = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed.set_author(name=f'{member} has joined {after.channel}(VC)')
+                        embed.set_thumbnail(url=(member.avatar_url))
+                        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed)
+                elif before.channel and not after.channel:
+                        embed1 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed1.set_author(name=f'{member} has left {before.channel}(VC)')
+                        embed1.set_thumbnail(url=(member.avatar_url))
+                        embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed1.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed1)
 
-                        elif not before.mute and after.mute:
-                                embed2 = discord.Embed(
-                                colour = 0xff0000
-                                )                
-                                embed2.set_author(name=f'{member} has been muted.')
-                                embed2.set_thumbnail(url=(member.avatar_url))
-                                embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                                embed2.timestamp = datetime.utcnow()
-                                await channel.send(embed=embed2)
+                elif not before.mute and after.mute:
+                        embed2 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed2.set_author(name=f'{member} has been muted.')
+                        embed2.set_thumbnail(url=(member.avatar_url))
+                        embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed2.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed2)
 
-                        elif not before.deaf and after.deaf:
-                                embed3 = discord.Embed(
-                                colour = 0xff0000
-                                )                
-                                embed3.set_author(name=f'{member} has been deafened.')
-                                embed3.set_thumbnail(url=(member.avatar_url))
-                                embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                                embed3.timestamp = datetime.utcnow()
-                                await channel.send(embed=embed3)
+                elif not before.deaf and after.deaf:
+                        embed3 = discord.Embed(
+                        colour = 0xff0000
+                        )                
+                        embed3.set_author(name=f'{member} has been deafened.')
+                        embed3.set_thumbnail(url=(member.avatar_url))
+                        embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+                        embed3.timestamp = datetime.utcnow()
+                        await channel.send(embed=embed3)
 
 
 

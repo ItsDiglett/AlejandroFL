@@ -62,8 +62,6 @@ class MessageLog:
 
         await channel.send(embed=embed)
 
-
-
     async def messages(self, messages, members, picture, messagechannel):
         bot = await self.client.fetch_user(618903054506393640)
         channel = self.client.get_channel(643907801604948018) #MessageLogs in FCR
@@ -84,8 +82,9 @@ class MessageLog:
         colour = 0xff0000
         )
         embed.set_author(name=(members), icon_url=(picture))
-        embed.add_field(name=f'Message was deleted in #{messagechannel}', value=(messages), inline=False)
+        embed.add_field(name=(messagechannel), value=(messages), inline=False)
         embed.timestamp = datetime.utcnow()
         embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
 
         await channel.send(embed=embed)
+           
