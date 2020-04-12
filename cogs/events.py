@@ -23,13 +23,13 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_message_delete(self, message = discord.Message):                
                 if message.guild.id == 504052021683290125:                
-                        await MessageLog.deletes(self, messages=(message.content), members=(message.author), picture=(message.author.avatar_url), messagechannel=f'Message was deleted in #{message.channel}:')
+                        await MessageLog.messagelogging(self, messages=(message.content), members=(message.author), picture=(message.author.avatar_url), messagechannel=f'Message was deleted in #{message.channel}:', Mchannel=643907846651772948)
         #This logs message edits and sends logs to Florida Control Room
         @commands.Cog.listener()
         async def on_message_edit(self, before, after):
                 if before.guild.id == 504052021683290125:
                         if before.content != after.content:
-                                await MessageLog.messageedits(self,self.client, messages=(before.content), after=(after.content), members=(before.author), picture=(before.author.avatar_url), messagechannel=(before.channel.mention))
+                                await MessageLog.messagelogging(self, messages=f'**Before:**\n{before.content}\n**After:**\n{after.content}',members=(before.author), picture=before.author.avatar_url, messagechannel=(before.channel), Mchannel=643907825986306058)
 
         #This is the welcoming function. Sends welcomes to Florida, #welcome
         @commands.Cog.listener()
@@ -79,7 +79,7 @@ class Example(commands.Cog):
                 if message.guild.id == 504052021683290125:
                         if not message.author.id == 618903054506393640:
                                 if not message.channel.id == 512429920912408576:
-                                        await MessageLog.messages(self, messages=(message.content),members=(message.author),picture=(message.author.avatar_url), messagechannel=(message.channel))
+                                        await MessageLog.messagelogging(self, messages=(message.content),members=(message.author),picture=(message.author.avatar_url), messagechannel=(message.channel), Mchannel= 643907801604948018)
 
         @commands.Cog.listener()
         async def on_voice_state_update(self, member, before, after):

@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class Log:
-    def __init__(self, client, mod, action, members, Grole):
+    def __init__(self, client, mod, action, members, picture, Grole):
         self.client=client
         self.mod =mod
         self.action =action
@@ -38,33 +38,19 @@ class Log:
             embed.timestamp = datetime.utcnow()
 
             await channel.send(embed=embed)
+            
 class MessageLog:
-    def __init__(self, client, messages,after, members, picture, messagechannel):
+    def __init__(self, client, messages, members, picture, messagechannel, Mchannel):
         self.client = client
         self.messages = messages
-        self.after = after
         self.members = members
         self.picture = picture
         self.messagechannel = messagechannel
+        self.Mchannel = Mchannel
 
-    async def messageedits(self,client,messages, after, members, picture, messagechannel):
+    async def messagelogging(self, messages, members, picture, messagechannel, Mchannel):
         bot = await self.client.fetch_user(618903054506393640)
-        channel = self.client.get_channel(643907825986306058) #MessageEdits in FCR
-        embed = discord.Embed(
-        colour = 0xff0000
-        )
-        embed.set_author(name=(members), icon_url=(picture))
-        embed.description = f'**Message was edited in** {messagechannel}'
-        embed.add_field(name='Before', value=(messages), inline=False)
-        embed.add_field(name='After:', value=(after), inline=False)
-        embed.timestamp = datetime.utcnow()
-        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-
-        await channel.send(embed=embed)
-
-    async def messages(self, messages, members, picture, messagechannel):
-        bot = await self.client.fetch_user(618903054506393640)
-        channel = self.client.get_channel(643907801604948018) #MessageLogs in FCR
+        channel = self.client.get_channel(Mchannel) #MessageLogs in FCR
         embed = discord.Embed(
         colour = 0xff0000
         )
@@ -74,17 +60,3 @@ class MessageLog:
         embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
 
         await channel.send(embed=embed)
-
-    async def deletes(self, messages, members, picture, messagechannel):
-        bot = await self.client.fetch_user(618903054506393640)
-        channel = self.client.get_channel(643907846651772948) #MessageDeletes in FCR
-        embed = discord.Embed(
-        colour = 0xff0000
-        )
-        embed.set_author(name=(members), icon_url=(picture))
-        embed.add_field(name=(messagechannel), value=(messages), inline=False)
-        embed.timestamp = datetime.utcnow()
-        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-
-        await channel.send(embed=embed)
-           

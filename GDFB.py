@@ -18,6 +18,12 @@ for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             client.load_extension(f'cogs.{filename[:-3]}')
 
+@client.command()
+async def test(ctx):
+    embed = discord.Embed(
+    colour = 0xff0000
+    )
+    embed.set_author(name='')
 @client.event
 async def on_member_remove(member):
     bot = await client.fetch_user(618903054506393640)
