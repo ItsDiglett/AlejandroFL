@@ -50,7 +50,6 @@ class Moderation(commands.Cog):
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
                     role = ctx.guild.get_role(512018933134524430) #Gulaged Role
-                    NSFW = ctx.guild.get_role(512421686587424768) #NSFW Role
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
