@@ -38,7 +38,7 @@ class Log:
             embed.timestamp = datetime.utcnow()
 
             await channel.send(embed=embed)
-            
+
 class MessageLog:
     def __init__(self, client, messages, members, picture, messagechannel, Mchannel):
         self.client = client
@@ -56,6 +56,25 @@ class MessageLog:
         )
         embed.set_author(name=(members), icon_url=(picture))
         embed.add_field(name=(messagechannel), value=(messages))
+        embed.timestamp = datetime.utcnow()
+        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
+
+        await channel.send(embed=embed)
+class EventLog:
+    def __init__(self, client, event, picture, Mchannel):
+        self.client = client
+        self.event = event
+        self.picture = picture
+        self.Mchannel = Mchannel
+
+    async def logevent(self, client, event, picture, Mchannel):
+        bot = await self.client.fetch_user(618903054506393640)
+        channel = self.client.get_channel(Mchannel)
+        embed = discord.Embed(
+        colour = 0xff0000
+        )
+        embed.set_author(name=(event))
+        embed.set_thumbnail(url=(picture))
         embed.timestamp = datetime.utcnow()
         embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
 

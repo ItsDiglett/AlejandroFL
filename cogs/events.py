@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from embedcreator import MessageLog
+from embedcreator import MessageLog, EventLog
 from discord.utils import get
 from discord import FFmpegPCMAudio
 import asyncio
@@ -84,48 +84,17 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_voice_state_update(self, member, before, after):
                 bot = await self.client.fetch_user(618903054506393640)
-                channel = self.client.get_channel(658050554806927360)
+                channel = 658050554806927360
                 if not before.channel and after.channel:
-                        embed = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed.set_author(name=f'{member} has joined {after.channel}(VC)')
-                        embed.set_thumbnail(url=(member.avatar_url))
-                        embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed)
+                        await EventLog.logevent(self, self.client, event=f'{member} has joined {after.channel}(VC)', picture=(member.avatar_url), Mchannel=channel)
                 elif before.channel and not after.channel:
-                        embed1 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed1.set_author(name=f'{member} has left {before.channel}(VC)')
-                        embed1.set_thumbnail(url=(member.avatar_url))
-                        embed1.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed1.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed1)
+                        await EventLog.logevent(self, self.client, event=f'{member} has left {before.channel}(VC)', picture=(member.avatar_url), Mchannel=channel)     
 
                 elif not before.mute and after.mute:
-                        embed2 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed2.set_author(name=f'{member} has been muted.')
-                        embed2.set_thumbnail(url=(member.avatar_url))
-                        embed2.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed2.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed2)
+                        await EventLog.logevent(self, self.client, event=f'{member} has been muted.', picture=(member.avatar_url), Mchannel=channel)
 
                 elif not before.deaf and after.deaf:
-                        embed3 = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed3.set_author(name=f'{member} has been deafened.')
-                        embed3.set_thumbnail(url=(member.avatar_url))
-                        embed3.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-                        embed3.timestamp = datetime.utcnow()
-                        await channel.send(embed=embed3)
-
-
-
+                        await EventLog.logevent(self, self.client, event=f'{member} has been deafened.', picture=(member.avatar_url), Mchannel=channel)
 
 def setup(client):
         client.add_cog(Example(client))
