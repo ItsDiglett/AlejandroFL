@@ -20,16 +20,17 @@ class Moderation(commands.Cog):
 
         @commands.command(pass_context=True,name='ungulag', help='Ungulags a member')
         async def ungulag(self, ctx, member: discord.Member):
-
-            db = sqlite3.connect('main.sqlite')
-            cursor = db.cursor()
-            cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
-            result = cursor.fetchone()
-            if result is None:
-                await asyncio.sleep(0.01)
-            else:
-                if ctx.message.author.guild_permissions.manage_messages:           
-                    role = ctx.guild.get_role(512018933134524430) #Gulaged Role
+            if ctx.message.author.guild_permissions.manage_messages:
+                role = ctx.guild.get_role(512018933134524430)
+                db = sqlite3.connect('main.sqlite')
+                cursor = db.cursor()
+                cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
+                result = cursor.fetchone()
+                if result is None:
+                    await member.remove_roles(role)
+                    await ctx.message.add_reaciton('✅')
+                else:
+                    #Gulaged Role
                     await member.remove_roles(role)
                     await ctx.message.add_reaction('✅')
                     await Log.modlogs(self, ctx, mod=(ctx.message.author), action='ungulaged', members=(member), picture=(member.avatar_url), Grole=None)
@@ -37,32 +38,28 @@ class Moderation(commands.Cog):
                     sql = (f'DELETE FROM gulag WHERE user_id = {member.id}')
                     cursor.execute(sql)
                     db.commit()
-                else:
-                    pass
 
         @commands.command(pass_context=True,name='gulag', help='Gulags a member')
         async def gulag(self,ctx, member: discord.Member):
-
+            role = ctx.guild.get_role(512018933134524430) #gulaged role
             db = sqlite3.connect('main.sqlite')
             cursor = db.cursor()
             cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
             result = cursor.fetchone()
             if result is None:
                 if ctx.message.author.guild_permissions.manage_messages:
-                    role = ctx.guild.get_role(512018933134524430) #Gulaged Role
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
                     cursor.execute(sql, val)
                     db.commit()
-
                     await ctx.message.add_reaction('✅')
                     await Log.modlogs(self, ctx, mod=(ctx.message.author), action='gulaged', members=(member), picture=(member.avatar_url), Grole=None)
                 else:
                     pass
             else:
-                await asyncio.sleep(0.01)
-                print('yes')
+                await member.add_roles(role)
+                await ctx.message.add_reaction('✅')
 
         @commands.command(pass_context=True,name='ban', help='Bans a member')
         async def ban(self, ctx, member : discord.Member, *, reason=None):
@@ -79,7 +76,6 @@ class Moderation(commands.Cog):
         async def purge(self, ctx, amount=5):
             if ctx.message.author.guild_permissions.manage_messages:
                 await ctx.channel.purge(limit=amount)
-
             else:
                 pass
 

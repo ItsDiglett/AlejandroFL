@@ -19,7 +19,7 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_raw_reaction_add(self, payload):
             message_id = payload.message_id
-            if message_id == 646833893382553600:
+            if message_id == 691483280028991509:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
 
@@ -40,25 +40,29 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Halo)
                 elif payload.emoji.name =='🇪':
+                    AC = discord.utils.get(guild.roles, name='Animal Crossing')
+                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                    await member.add_roles(AC)            
+                elif payload.emoji.name =='🇫':
                     PC = discord.utils.get(guild.roles, name='PC')
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(PC)            
-                elif payload.emoji.name =='🇫':
-                    Xbox = discord.utils.get(guild.roles, name='Xbox')
-                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.add_roles(Xbox)            
                 elif payload.emoji.name =='🇬':
+                    Xbox = discord.utils.get(guild.roles, name='Xbox')   
+                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                    await member.add_roles(Xbox)    
+                elif payload.emoji.name =='🇭':
                     PS4 = discord.utils.get(guild.roles, name='PS4')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.add_roles(PS4)    
-                elif payload.emoji.name =='🇭':
+                    await member.add_roles(PS4)     
+                elif payload.emoji.name =='🇮':
                     Switch = discord.utils.get(guild.roles, name='Switch')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.add_roles(Switch)                  
+                    await member.add_roles(Switch)                
                 else:
                     print('Not Ye')
 
-            elif message_id == 646833893890326538:
+            elif message_id == 691483294709055538:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name == '🇦':
@@ -134,7 +138,7 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(FL18)
 
-            elif message_id == 646833894255230976:
+            elif message_id == 691483319811964951:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
                 if payload.emoji.name=='💚':
@@ -170,7 +174,7 @@ class Example(commands.Cog):
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.add_roles(Yellow)
 
-            elif message_id == 646833894917931036:
+            elif message_id == 691483331073933372:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
 
@@ -182,7 +186,7 @@ class Example(commands.Cog):
             elif message_id == 643944538833944606:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-                if payload.emoji.name == '✅':
+                if payload.emoji.name == '❌':
                     Role = guild.get_role(507597977754402846)
                     unverified = discord.utils.get(guild.roles, name='unverified')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)

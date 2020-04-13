@@ -60,6 +60,7 @@ class MessageLog:
         embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
 
         await channel.send(embed=embed)
+        
 class EventLog:
     def __init__(self, client, event, picture, Mchannel):
         self.client = client

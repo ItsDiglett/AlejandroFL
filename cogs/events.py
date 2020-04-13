@@ -83,7 +83,6 @@ class Example(commands.Cog):
 
         @commands.Cog.listener()
         async def on_voice_state_update(self, member, before, after):
-                bot = await self.client.fetch_user(618903054506393640)
                 channel = 658050554806927360
                 if not before.channel and after.channel:
                         await EventLog.logevent(self, self.client, event=f'{member} has joined {after.channel}(VC)', picture=(member.avatar_url), Mchannel=channel)
