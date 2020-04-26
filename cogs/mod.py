@@ -13,6 +13,7 @@ from datetime import datetime
 import gtts
 from embedcreator import Log
 
+vc = None
 
 class Moderation(commands.Cog):
         def __init__(self,client):
@@ -42,12 +43,13 @@ class Moderation(commands.Cog):
         @commands.command(pass_context=True,name='gulag', help='Gulags a member')
         async def gulag(self,ctx, member: discord.Member):
             role = ctx.guild.get_role(512018933134524430) #gulaged role
+            nsfw = ctx.guild.get_role(512421686587424768)
             db = sqlite3.connect('main.sqlite')
             cursor = db.cursor()
             cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
             result = cursor.fetchone()
             if result is None:
-                if ctx.message.author.guild_permissions.manage_messages:
+                if ctx.message.author.guild_permissions.manage_messages:               
                     await member.add_roles(role)
                     sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
                     val = (member.id, 1)
@@ -55,6 +57,9 @@ class Moderation(commands.Cog):
                     db.commit()
                     await ctx.message.add_reaction('✅')
                     await Log.modlogs(self, ctx, mod=(ctx.message.author), action='gulaged', members=(member), picture=(member.avatar_url), Grole=None)
+
+                    if nsfw in member.roles:
+                        await member.remove_roles(nsfw)
                 else:
                     pass
             else:
@@ -130,6 +135,30 @@ class Moderation(commands.Cog):
                     await channel.edit(slowmode_delay=15)
                 else:
                     await channel.edit(slowmode_delay=0)
+
+        @commands.command(pass_context=True, name='t', help = 'Text to speech')
+        async def t(self, ctx, *, texts:str):
+            global vc
+            if ctx.message.author.guild_permissions.manage_messages:
+                tts = gtts.gTTS(texts)
+                tts.save("tts.mp3")
+                channel = ctx.message.author.voice.channel
+                if vc is None:
+                    vc = await channel.connect()
+                elif vc.channel != channel:
+                    vc = await channel.connect()  
+
+                vc.play(discord.FFmpegPCMAudio(f'tts.mp3')) 
+                while vc.is_playing():
+                        await asyncio.sleep(0.1)
+                vc.stop()
+            else:
+                pass
+
+        @commands.command(pass_context=True, name='leave', help = 'forces Alejandro out of VC')
+        async def leave(self,ctx):
+            server = ctx.message.guild.voice_client
+            await server.disconnect()           
 
 
 def setup(client):

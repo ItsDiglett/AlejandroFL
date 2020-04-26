@@ -39,26 +39,16 @@ class Example(commands.Cog):
                         await member.add_roles(unverified)
                         #These are the channels, FL = Florida, FCR = Control Room
                         channel = self.client.get_channel(507030960756228108) #Welcome, FL
-                        channel3 = self.client.get_channel(643908037718966292) #joins channel, FCR
                         channel2 = self.client.get_channel(643915842865856524) #Members channel, FL
                         
                         #This updates the member count in FCR
                         await channel2.edit(name= f'Members: {member.guild.member_count} ')
-                        bot = await self.client.fetch_user(618903054506393640)
                         #This sends the welcome #message in FL
                         rules = self.client.get_channel(511614286640971796) # rules channel
                         await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention}!')
 
                         #This sends the message in #joins in FCR 
-                        embed = discord.Embed(
-                        colour = 0xff0000
-                        )                
-                        embed.set_author(name=f'{member} has joined the server')
-                        embed.set_thumbnail(url=(member.avatar_url))
-                        embed.timestamp = member.joined_at
-                        embed.set_footer(text='Baby Alejandro#8144', icon_url=(bot.avatar_url))
-                        await channel3.send(embed=embed)
-
+                        await Eventlog.logevent(self, self.client, event=f'{member} has joined the server', picture=(member.avatar_url), Mchannel=643908037718966292)
                         #This checks if some has been gulag'd (role persist)
                         db = sqlite3.connect('main.sqlite')
                         cursor = db.cursor()
@@ -72,6 +62,17 @@ class Example(commands.Cog):
                                 await asyncio.sleep(0.01)
 
                         await self.client.process_commands(member)
+
+        @commands.Cog.listener()
+        async def on_member_remove(self, member):
+                if member.guild.id == 504052021683290125:
+                        channel = self.client.get_channel(643915842865856524) #members channel
+                        await EventLog.logevent(self, self.client, event=f'{member} has left the server', picture=(member.avatar_url), Mchannel= 643908047202287636)
+                        await channel.edit(name= f'Members: {member.guild.member_count} ')
+                else:
+                        pass
+
+                await self.client.process_commands(member)
 
         #This is the message logging function in FCR
         @commands.Cog.listener()

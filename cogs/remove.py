@@ -174,7 +174,7 @@ class Example(commands.Cog):
             elif message_id == 691483331073933372:
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-                if payload.emoji.name == '✅':
+                if payload.emoji.name == '❌':
                     NSFW = discord.utils.get(guild.roles, name='NSFW')   
                     member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                     await member.remove_roles(NSFW)
