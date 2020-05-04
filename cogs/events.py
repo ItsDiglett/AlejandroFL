@@ -6,7 +6,6 @@ from discord import FFmpegPCMAudio
 import asyncio
 import os
 import json
-from config import dev
 import time
 import sqlite3
 from datetime import datetime, timedelta
@@ -48,7 +47,7 @@ class Example(commands.Cog):
                         await channel.send(f'Welcome to Florida {member.mention}! Make sure to read {rules.mention}!')
 
                         #This sends the message in #joins in FCR 
-                        await Eventlog.logevent(self, self.client, event=f'{member} has joined the server', picture=(member.avatar_url), Mchannel=643908037718966292)
+                        await EventLog.logevent(self, self.client, event=f'{member} has joined the server', picture=(member.avatar_url), Mchannel=643908037718966292)
                         #This checks if some has been gulag'd (role persist)
                         db = sqlite3.connect('main.sqlite')
                         cursor = db.cursor()
