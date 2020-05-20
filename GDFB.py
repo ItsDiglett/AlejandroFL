@@ -10,6 +10,7 @@ import sqlite3
 import json
 from datetime import datetime, timedelta
 import time
+import Constants
 
 print(os.getcwd())
 client = commands.Bot(command_prefix = '/') 
@@ -17,6 +18,18 @@ client = commands.Bot(command_prefix = '/')
 for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             client.load_extension(f'cogs.{filename[:-3]}')
+
+@client.command()
+async def wow(ctx):
+    embed = discord.Embed(
+    colour = Constants.ROLE_COLOUR
+    )
+    embed.add_field(name='Test', value='Test', inline=False)
+    await ctx.send(embed=embed)
+    
+
+
+
 
 
 client.run(alejandro)

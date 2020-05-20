@@ -9,6 +9,7 @@ import time
 import sqlite3
 import math
 import random
+from actions import database
 
 class leaderboard(commands.Cog):
         def __init__(self,client):
@@ -47,35 +48,11 @@ class leaderboard(commands.Cog):
         async def rank(self, ctx, user: discord.User=None):
             #If there is no @mention in the rank command
             if user is None:
-                db = sqlite3.connect('main.sqlite')
-                cursor = db.cursor()
-                cursor.execute(f'SELECT msg FROM messages WHERE user_id = {ctx.message.author.id}')
-                result = cursor.fetchone()
-                channel = ctx.message.channel
-                embed = discord.Embed(
-                colour = discord.Colour.blue()
-                )
-                embed.set_author(name=(ctx.message.author.name))
-                embed.set_thumbnail(url=(ctx.message.author.avatar_url))
-                embed.add_field(name='XP:', value=f'{result[0]}xp')
-
-                await channel.send(embed=embed)
+                await database.opendb(self, user=(ctx.message.author.id), Mchannel=(ctx.message.channel.id), thumbnail=(ctx.message.author.avatar_url))
             #If there is an @mention in the rank command
             if user is not None:
-                db = sqlite3.connect('main.sqlite')
-                cursor = db.cursor()
-                cursor.execute(f'SELECT msg FROM messages WHERE user_id = {user.id}')
-                result1 = cursor.fetchone()
+                await database.opendb(self, user=(user.id), Mchannel=(ctx.message.channel.id), thumbnail=(user.avatar_url))
 
-                embed = discord.Embed(
-                colour = discord.Colour.blue()
-                )
-                channel = ctx.message.channel
-                embed.set_author(name=(user.name))
-                embed.set_thumbnail(url=(user.avatar_url))
-                embed.add_field(name='XP:', value=f'{result1[0]}xp')
-
-                await channel.send(embed=embed)
                 
         #This displays the leaderboard. It's terribly done, I know. I'll fix it later.
         @commands.command()
@@ -108,6 +85,9 @@ class leaderboard(commands.Cog):
             embed.add_field(name=f'Scores:', value=f'{results1[0]}\n{results1[1]}\n{results1[2]}\n{results1[3]}\n{results1[4]}\n{results1[5]}\n{results1[6]}\n{results1[7]}\n{results1[8]}\n{results1[9]}')
             
             await channel.send(embed=embed)
+
+
+                
 
 def setup(client):
         client.add_cog(leaderboard(client))

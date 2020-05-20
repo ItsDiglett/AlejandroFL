@@ -7,3 +7,5 @@ yah.json
 /__pycache__
 /.vscode
 /cogs/__pycache__
+Constants.py
+cogs/moderation2.py

@@ -2,25 +2,27 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 from datetime import datetime
+import Constants
 
 
 class Log:
-    def __init__(self, client, mod, action, members, picture, Grole):
+    def __init__(self, client, mod, action, members, picture, Grole, reason):
         self.client=client
         self.mod =mod
         self.action =action
         self.members =members
         self.picture = picture
         self.Grole = Grole
+        self.reason = reason
 
-    async def modlogs(self, ctx, mod, action, members, picture, Grole):
+    async def modlogs(self, ctx, mod, action, members, picture, Grole, reason):
         if Grole == None:
             bot = await self.client.fetch_user(618903054506393640)
-            channel = self.client.get_channel(643908781452820490)
+            channel = self.client.get_channel(Constants.MODACTIONS)
             embed = discord.Embed(
-            colour = 0xff0000
+            colour = Constants.ROLE_COLOUR
             )
-            embed.set_author(name = f'{mod} has {action} {members}')
+            embed.set_author(name = f'{mod} has {action} {members}\nReason: {reason}')
             embed.set_thumbnail(url=(picture))
             embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
             embed.timestamp = datetime.utcnow()
@@ -30,7 +32,7 @@ class Log:
             bot = await self.client.fetch_user(618903054506393640)
             channel = self.client.get_channel(643908781452820490)
             embed = discord.Embed(
-            colour = 0xff0000
+            colour = Constants.ROLE_COLOUR
             )
             embed.set_author(name = f'{mod} has {action} {members} {Grole}')
             embed.set_thumbnail(url=(picture))
@@ -52,7 +54,7 @@ class MessageLog:
         bot = await self.client.fetch_user(618903054506393640)
         channel = self.client.get_channel(Mchannel) #MessageLogs in FCR
         embed = discord.Embed(
-        colour = 0xff0000
+        colour = Constants.ROLE_COLOUR
         )
         embed.set_author(name=(members), icon_url=(picture))
         embed.add_field(name=(messagechannel), value=(messages))
@@ -72,7 +74,7 @@ class EventLog:
         bot = await self.client.fetch_user(618903054506393640)
         channel = self.client.get_channel(Mchannel)
         embed = discord.Embed(
-        colour = 0xff0000
+        colour = Constants.ROLE_COLOUR
         )
         embed.set_author(name=(event))
         embed.set_thumbnail(url=(picture))
