@@ -52,8 +52,8 @@ class leaderboard(commands.Cog):
             #If there is an @mention in the rank command
             if user is not None:
                 await database.opendb(self, user=(user.id), Mchannel=(ctx.message.channel.id), thumbnail=(user.avatar_url))
+        
 
-                
         #This displays the leaderboard. It's terribly done, I know. I'll fix it later.
         @commands.command()
         async def leaderboard(self, ctx):
@@ -80,8 +80,8 @@ class leaderboard(commands.Cog):
             embed = discord.Embed(
             colour = discord.Colour.blue()
             )
-            embed.set_author(name= 'Florida Leader Board', icon_url=(ctx.guild.icon_url))
             embed.add_field(name=f'Users:', value=f'1. {t1}\n2. {t2}\n3. {t3}\n4. {t4}\n5. {t5}\n6. {t6}\n7. {t7}\n8. {t8}\n9. {t9}\n10. {t10}\n\nDon\'t see your name? Do /rank to find out your XP!', inline=True)
+            embed.set_author(name= 'Florida Leader Board', icon_url=(ctx.guild.icon_url))
             embed.add_field(name=f'Scores:', value=f'{results1[0]}\n{results1[1]}\n{results1[2]}\n{results1[3]}\n{results1[4]}\n{results1[5]}\n{results1[6]}\n{results1[7]}\n{results1[8]}\n{results1[9]}')
             
             await channel.send(embed=embed)

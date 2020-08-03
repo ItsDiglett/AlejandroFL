@@ -65,7 +65,7 @@ class Example(commands.Cog):
 
         @commands.Cog.listener()
         async def on_member_remove(self, member):
-                if member.guild.id == Constants.florida:
+                if member.guild.id == Constants.FLORIDA:
                         channel = self.client.get_channel(Constants.MEMBERS) #members channel
                         await EventLog.logevent(self, self.client, event=f'{member} has left the server', picture=(member.avatar_url), Mchannel= Constants.LEAVES)
                         await channel.edit(name= f'Members: {member.guild.member_count} ')
