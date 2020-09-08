@@ -15,8 +15,8 @@ class Log:
         self.Grole = Grole
         self.reason = reason
 
-    async def modlogs(self, ctx, mod, action, members, picture, Grole, reason):
-        if Grole == None:
+    #This logs everything in Mod-actions in FCR
+    async def modlogs(self, ctx, mod, action, members, picture, reason):
             bot = await self.client.fetch_user(618903054506393640)
             channel = self.client.get_channel(Constants.MODACTIONS)
             embed = discord.Embed(
@@ -28,18 +28,7 @@ class Log:
             embed.timestamp = datetime.utcnow()
             
             await channel.send(embed=embed)
-        else:
-            bot = await self.client.fetch_user(618903054506393640)
-            channel = self.client.get_channel(643908781452820490)
-            embed = discord.Embed(
-            colour = Constants.ROLE_COLOUR
-            )
-            embed.set_author(name = f'{mod} has {action} {members} {Grole}')
-            embed.set_thumbnail(url=(picture))
-            embed.set_footer(text=f'{bot}', icon_url=(bot.avatar_url))
-            embed.timestamp = datetime.utcnow()
 
-            await channel.send(embed=embed)
 
 class MessageLog:
     def __init__(self, client, messages, members, picture, messagechannel, Mchannel):

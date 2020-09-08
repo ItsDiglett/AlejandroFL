@@ -14,11 +14,10 @@ class Example(commands.Cog):
         def __init__(self,client):
                 self.client=client
 
-        #One of these days I'll stop being a failure at life and actually code this correctly. 
 
         @commands.Cog.listener()
         async def on_raw_reaction_add(self, payload):
-            
+            message_id = payload.message_id
             if message_id == 691483280028991509:
                 pair = {'🇦': 'League Of Legends','🇧': 'Minecraft','🇨': 'Destiny 2','🇩': 'Halo','🇪': 'Animal Crossing','🇫': 'PC','🇬': 'Xbox','🇭': 'PS4','🇮': 'Switch'}
                 guild_id = payload.guild_id
@@ -48,14 +47,13 @@ class Example(commands.Cog):
                 member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                 await member.add_roles(colour)
 
-            elif message_id == 691483331073933372:
+            elif message_id == 739704955706933280:
+                pair = {'❌': 'NSFW','🌈': '🌈'}
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-
-                if payload.emoji.name == '❌':
-                    NSFW = discord.utils.get(guild.roles, name='NSFW')   
-                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.add_roles(NSFW)
+                NSFW = discord.utils.get(guild.roles, name=f'{pair[payload.emoji.name]}')   
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                await member.add_roles(NSFW)
 
             elif message_id == 643944538833944606:
                 guild_id = payload.guild_id
@@ -75,6 +73,7 @@ class Example(commands.Cog):
 
                     channel = self.client.get_channel(658725663691505678)
                     await channel.send(embed=embed)
+
 
             
 

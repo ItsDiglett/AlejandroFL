@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 from discord import FFmpegPCMAudio
-from config import dev
 import asyncio
 import os
 import time
@@ -44,18 +43,27 @@ class leaderboard(commands.Cog):
                     cursor.execute(sql, val)
                     db.commit()
 
-        @commands.command()
-        async def rank(self, ctx, user: discord.User=None):
+                    #cursor.execute(f'SELECT seasonxp FROM messages WHERE user_id ={message.author.id}')
+                    #result2 = cursor.fetchone()
+                    #xp = int(result2[0])
+                    #print(xp)
+                    #sql = ('UPDATE messages SET seasonxp = ? WHERE user_id = ?')
+                    #val = (xp + rand, str(message.author.id))
+                    #cursor.execute(sql, val)
+                    #db.commit()
+
+
+        @commands.command(name='rank', help='shows a members rank')
+        async def rank(self, ctx, user:discord.User = None):
             #If there is no @mention in the rank command
             if user is None:
                 await database.opendb(self, user=(ctx.message.author.id), Mchannel=(ctx.message.channel.id), thumbnail=(ctx.message.author.avatar_url))
             #If there is an @mention in the rank command
             if user is not None:
                 await database.opendb(self, user=(user.id), Mchannel=(ctx.message.channel.id), thumbnail=(user.avatar_url))
-        
 
         #This displays the leaderboard. It's terribly done, I know. I'll fix it later.
-        @commands.command()
+        @commands.command(name='leaderboard', help='shows the server leaderboard')
         async def leaderboard(self, ctx):
             db = sqlite3.connect('main.sqlite')
             db.row_factory = lambda cursor, row: row[0]
@@ -65,6 +73,7 @@ class leaderboard(commands.Cog):
             cursor.execute(f'Select user_id FROM messages ORDER BY msg DESC')
             results1 = cursor1.fetchall()
             result = cursor.fetchall()
+            print(result[1])
             t1 = await self.client.fetch_user(result[0])
             t2 = await self.client.fetch_user(result[1])
             t3 = await self.client.fetch_user(result[2])
@@ -85,6 +94,7 @@ class leaderboard(commands.Cog):
             embed.add_field(name=f'Scores:', value=f'{results1[0]}\n{results1[1]}\n{results1[2]}\n{results1[3]}\n{results1[4]}\n{results1[5]}\n{results1[6]}\n{results1[7]}\n{results1[8]}\n{results1[9]}')
             
             await channel.send(embed=embed)
+
 
 
                 

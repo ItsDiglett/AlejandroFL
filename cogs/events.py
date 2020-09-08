@@ -10,7 +10,7 @@ import time
 import sqlite3
 from datetime import datetime, timedelta
 import Constants
-
+messageCount = {}
 class Example(commands.Cog):
         def __init__(self,client):
                 self.client=client
@@ -49,6 +49,7 @@ class Example(commands.Cog):
 
                         #This sends the message in #joins in FCR 
                         await EventLog.logevent(self, self.client, event=f'{member} has joined the server', picture=(member.avatar_url), Mchannel=Constants.JOINS)
+
                         #This checks if some has been gulag'd (role persist)
                         db = sqlite3.connect('main.sqlite')
                         cursor = db.cursor()
@@ -59,8 +60,7 @@ class Example(commands.Cog):
                                 role = discord.utils.get(member.guild.roles, name='Gulaged')
                                 await member.add_roles(role)
                         else:
-                                await asyncio.sleep(0.01)
-
+                                pass
                         await self.client.process_commands(member)
 
         @commands.Cog.listener()
@@ -77,24 +77,42 @@ class Example(commands.Cog):
         #This is the message logging function in FCR
         @commands.Cog.listener()
         async def on_message(self, message):
+                
+                transition = str.maketrans({'|': '', '*': '', '`':''})
                 if message.guild.id == Constants.FLORIDA:
                         if not message.author.id == 618903054506393640:
                                 if not message.channel.id == 512429920912408576:
-                                        await MessageLog.messagelogging(self, messages=(message.content),members=(message.author),picture=(message.author.avatar_url), messagechannel=(message.channel), Mchannel= Constants.MESSAGELOGS)
+                                      await MessageLog.messagelogging(self, messages=(message.content),members=(message.author),picture=(message.author.avatar_url), messagechannel=(message.channel), Mchannel= Constants.MESSAGELOGS)
+
+                for words in Constants.AUTOWORDS:
+                        if words in message.content.lower().translate(transition):
+                                await message.delete()
+                        else:
+                                pass
+                if message.author.id not in messageCount.keys():
+                        messageCount[message.author.id] = 1
+                else:
+                        messageCount[message.author.id] += 1
 
         @commands.Cog.listener()
         async def on_voice_state_update(self, member, before, after):
+                role = member.guild.get_role(747694079567069237)
                 if not before.channel and after.channel:
                         await EventLog.logevent(self, self.client, event=f'{member} has joined {after.channel}(VC)', picture=(member.avatar_url), Mchannel=Constants.VCLOGS)
-
+                        await member.add_roles(role)
                 elif before.channel and not after.channel:
                         await EventLog.logevent(self, self.client, event=f'{member} has left {before.channel}(VC)', picture=(member.avatar_url), Mchannel=Constants.VCLOGS)     
-
+                        await member.remove_roles(role)
                 elif not before.mute and after.mute:
                         await EventLog.logevent(self, self.client, event=f'{member} has been muted.', picture=(member.avatar_url), Mchannel=Constants.VCLOGS)
 
                 elif not before.deaf and after.deaf:
                         await EventLog.logevent(self, self.client, event=f'{member} has been deafened.', picture=(member.avatar_url), Mchannel=Constants.VCLOGS)
 
+
+        @commands.command()
+        async def mCount(self, ctx):
+                global messageCount
+                await ctx.message.author.send(f'{messageCount[ctx.message.author.id]} messages')
 def setup(client):
         client.add_cog(Example(client))

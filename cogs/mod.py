@@ -22,7 +22,7 @@ class Moderation(commands.Cog):
         def __init__(self,client):
                 self.client=client
     
-        @commands.command(pass_context=True,name='ungulag', help='Ungulags a member')
+        @commands.command(pass_context=True,name='ungulag', help='ungulags a member')
         async def ungulag(self, ctx, member: discord.Member, *, reasons=None):
             if ctx.message.author.guild_permissions.manage_messages:
                 role = ctx.guild.get_role(Constants.GULAGED)
@@ -37,13 +37,13 @@ class Moderation(commands.Cog):
                     #Gulaged Role
                     await member.remove_roles(role)
                     await ctx.message.add_reaction('✅')
-                    await Log.modlogs(self, ctx, mod=(ctx.message.author), action='ungulaged', members=(member), picture=(member.avatar_url), Grole=None, reason=reasons)
+                    await Log.modlogs(self, ctx, mod=(ctx.message.author), action='ungulaged', members=(member), picture=(member.avatar_url),reason=reasons)
                     
                     sql = (f'DELETE FROM gulag WHERE user_id = {member.id}')
                     cursor.execute(sql)
                     db.commit()
 
-        @commands.command(pass_context=True,name='gulag', help='Gulags a member')
+        @commands.command(pass_context=True,name='gulag', help='gulags a member')
         async def gulag(self,ctx, member: discord.Member, *, reasons=None):
             if ctx.message.author.guild_permissions.manage_messages:
                 role = ctx.guild.get_role(Constants.GULAGED) #gulaged role
@@ -53,19 +53,17 @@ class Moderation(commands.Cog):
                 cursor.execute(f'SELECT user_id FROM gulag where user_id ={member.id}')
                 result = cursor.fetchone()
                 if result is None:
-                    if ctx.message.author.guild_permissions.manage_messages:               
-                        await member.add_roles(role)
-                        sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
-                        val = (member.id, 1)
-                        cursor.execute(sql, val)
-                        db.commit()
-                        await ctx.message.add_reaction('✅')
-                        await Log.modlogs(self, ctx, mod=(ctx.message.author), action='gulaged', members=(member), picture=(member.avatar_url), Grole=None, reason=reasons)
-                        await Modactions.actionLogger(self, mod=(ctx.message.author), action='Gulaged', members=member.id, reason=reasons)
-                        if nsfw in member.roles:
-                            await member.remove_roles(nsfw)
-                    else:
-                        pass
+                    await member.add_roles(role)
+                    sql = ('INSERT INTO gulag(user_id, random) VALUES(?,?)')
+                    val = (member.id, 1)
+                    cursor.execute(sql, val)
+                    db.commit()
+                    await ctx.message.add_reaction('✅')
+                    await Log.modlogs(self, ctx, mod=(ctx.message.author), action='gulaged', members=(member), picture=(member.avatar_url),reason=reasons)
+                    await Modactions.actionLogger(self, mod=(ctx.message.author), action='Gulaged', members=member.id, reason=reasons)
+                    if nsfw in member.roles:
+                        await member.remove_roles(nsfw)
+
                 else:
                     await member.add_roles(role)
                     await ctx.message.add_reaction('✅')
@@ -73,12 +71,12 @@ class Moderation(commands.Cog):
             else: 
                 pass
 
-        @commands.command(pass_context=True,name='ban', help='Bans a member')
+        @commands.command(pass_context=True,name='ban', help='bans a member')
         async def ban(self, ctx, member : discord.Member, *, reasons=None):
             if ctx.message.author.guild_permissions.manage_messages:          
                 await member.ban(reason=None, delete_message_days=0)
                 await ctx.message.add_reaction('✅')
-                await Log.modlogs(self, ctx, mod=(ctx.message.author), action='banned', members=(member), picture=(member.avatar_url), Grole=None, reason=reasons)
+                await Log.modlogs(self, ctx, mod=(ctx.message.author), action='banned', members=(member), picture=(member.avatar_url),reason=reasons)
                 await Modactions.actionLogger(self, mod=(ctx.message.author), action='Banned', members=member.id, reason=reasons)
             elif ctx.message.author.id == 618897651026493441:
                 await member.ban(reason = reasons)
@@ -88,20 +86,24 @@ class Moderation(commands.Cog):
         @commands.command(pass_context=True, name='purge', help = 'purges messages from the chat.')
         async def purge(self, ctx, amount=5):
             if ctx.message.author.guild_permissions.manage_messages:
-                await ctx.channel.purge(limit=amount)
+                if amount < 100:
+                    await ctx.channel.purge(limit=amount)
+                else:
+                    await ctx.message.author.send('That was too much to purge, do less than 100.')
             else:
                 pass
 
-        @commands.command(pass_context=True,name='kick', help='Kicks a Member')
+        @commands.command(pass_context=True,name='kick', help='kicks a Member')
         async def kick(self, ctx, member : discord.Member, *, reasons=None):
             if ctx.message.author.guild_permissions.manage_messages:
                 await member.kick(reason=reasons)
                 await ctx.message.add_reaction('✅')
-                await Log.modlogs(self, ctx, mod=(ctx.message.author), action='kicked', members=(member), picture=(member.avatar_url), Grole=None, reason=reasons)
+                await Log.modlogs(self, ctx, mod=(ctx.message.author), action='kicked', members=(member), picture=(member.avatar_url),reason=reasons)
                 await Modactions.actionLogger(self, mod=(ctx.message.author), action='Kicked', members=member.id, reason=reasons)
             else:
                 pass
 
+        
         
 def setup(client):
         client.add_cog(Moderation(client))

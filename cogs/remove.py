@@ -16,10 +16,7 @@ class Example(commands.Cog):
         @commands.Cog.listener()
         async def on_raw_reaction_remove(self, payload):
             message_id = payload.message_id
-            if message_id == 691483280028991509:
-                guild_id = payload.guild_id
-                guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-
+            
             if message_id == 691483280028991509:
                 pair = {'🇦': 'League Of Legends','🇧': 'Minecraft','🇨': 'Destiny 2','🇩': 'Halo','🇪': 'Animal Crossing','🇫': 'PC','🇬': 'Xbox','🇭': 'PS4','🇮': 'Switch'}
                 guild_id = payload.guild_id
@@ -49,13 +46,13 @@ class Example(commands.Cog):
                 member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
                 await member.remove_roles(colour)
 
-            elif message_id == 691483331073933372:
+            elif message_id == 739704955706933280:
+                pair = {'❌': 'NSFW','🌈': '🌈'}
                 guild_id = payload.guild_id
                 guild = discord.utils.find(lambda g : g.id == guild_id, self.client.guilds)
-                if payload.emoji.name == '❌':
-                    NSFW = discord.utils.get(guild.roles, name='NSFW')   
-                    member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-                    await member.remove_roles(NSFW)
+                NSFW = discord.utils.get(guild.roles, name=f'{pair[payload.emoji.name]}')   
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+                await member.remove_roles(NSFW)
 
 
 
